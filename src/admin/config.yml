@@ -1,0 +1,24 @@
+backend:
+  name: github
+  repo: TWOJ_LOGIN_GITHUB/TWOJE_REPO
+
+media_folder: "src/Images"
+public_folder: "/Images"
+
+collections:
+  - name: "articles"
+    label: "Artykuły"
+    folder: "src/content/articles"
+    create: true
+    slug: "{{slug}}"
+
+    fields:
+      - { label: "Tytuł", name: "title", widget: "string" }
+
+      - { label: "Data publikacji", name: "date", widget: "datetime" }
+
+      - { label: "Krótki opis", name: "description", widget: "text" }
+
+      - { label: "Zdjęcie główne", name: "image", widget: "image" }
+
+      - { label: "Treść artykułu", name: "body", widget: "markdown" }
