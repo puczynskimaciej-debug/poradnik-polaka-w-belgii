@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: TWOJ_LOGIN_GITHUB/TWOJE_REPO
+  repo: puczynskimaciej-debug/poradnik-polaka-w-belgii
 
 media_folder: "src/Images"
 public_folder: "/Images"
