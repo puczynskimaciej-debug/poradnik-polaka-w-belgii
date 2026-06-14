@@ -7,6 +7,30 @@
 
     <link rel="stylesheet" href="/style.css">
 </head>
+
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+<script>
+    if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", user => {
+            if (
+                !user &&
+                (
+                    window.location.hash.includes("invite_token") ||
+                    window.location.hash.includes("recovery_token") ||
+                    window.location.hash.includes("confirmation_token")
+                )
+            ) {
+                window.netlifyIdentity.open();
+            }
+        });
+
+        window.netlifyIdentity.on("login", () => {
+            window.location.href = "/admin/";
+        });
+    }
+</script>
+
 <body>
 
     <header>
