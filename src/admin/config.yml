@@ -1,6 +1,6 @@
 backend:
-  name: github
-  repo: puczynskimaciej-debug/poradnik-polaka-w-belgii
+  name: git-gateway
+  branch: main
 
 media_folder: "src/Images"
 public_folder: "/Images"
