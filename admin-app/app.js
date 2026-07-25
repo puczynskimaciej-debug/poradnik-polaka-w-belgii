@@ -37,10 +37,9 @@ async function githubUser() {
 }
 
 async function loadContent() {
-  const [home, site, articles, media, history] = await Promise.all([state.repository.home(), state.repository.site(), state.repository.articles(), state.repository.media(), state.api.commits()]);
+  const [home, site, articles, media] = await Promise.all([state.repository.home(), state.repository.site(), state.repository.articles(), state.repository.media()]);
   [state.home, state.homeSha, state.site, state.siteSha, state.articles, state.media] = [home.data, home.sha, site.data, site.sha, articles, media];
-  state.history = history;
-  if (state.isAdmin) [state.users, state.invitations] = await Promise.all([state.api.collaborators(), state.api.invitations()]);
+  if (state.isAdmin) [state.users, state.invitations, state.history] = await Promise.all([state.api.collaborators(), state.api.invitations(), state.api.commits()]);
   renderAll();
 }
 

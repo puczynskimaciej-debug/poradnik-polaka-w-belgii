@@ -1,46 +1,46 @@
 {
   "hero": {
-    "eyebrow": "Twój przewodnik po Belgii",
-    "title": "Belgia po polsku. Prościej, bliżej, razem.",
-    "description": "Rzetelne informacje o pracy, formalnościach i codziennym życiu oraz wiadomości ważne dla Polaków mieszkających w Belgii."
+    "eyebrow": "Testowa wersja serwisu",
+    "title": "Testowa strona Polaków w Belgii",
+    "description": "To przykładowa treść sekcji głównej. Pokazuje miejsce na najważniejszy komunikat, krótki opis portalu i przyciski prowadzące do artykułów oraz ogłoszeń."
   },
   "news": [
     {
-      "title": "Jak odnaleźć się w belgijskich formalnościach?",
-      "category": "Formalności",
-      "description": "Najważniejsze urzędy, dokumenty i pierwsze kroki po przeprowadzce.",
-      "image": "/images/hero.jpg",
-      "link": "/artykuly/"
+      "title": "Testowy news o pierwszych dniach w Belgii",
+      "category": "Test: formalności",
+      "description": "Przykładowy opis kafelka prezentującego wiadomość o dokumentach i pierwszych krokach po przeprowadzce.",
+      "image": "/images/placeholders/start-belgia.svg",
+      "link": "/artykuly/test/"
     },
     {
-      "title": "Praca i zwolnienie lekarskie w Belgii",
-      "category": "Praca",
-      "description": "Co zrobić, gdy zachorujesz i jakie obowiązki ma pracownik?",
-      "image": "/images/white-hoodie-mockup-hanger_653045-1865.avif",
-      "link": "/artykuly/"
+      "title": "Testowy news o pracy",
+      "category": "Test: praca",
+      "description": "Przykładowy opis materiału dotyczącego dnia pracy, obowiązków oraz organizacji dokumentów.",
+      "image": "/images/placeholders/praca-belgia.svg",
+      "link": "/artykuly/test-praca/"
     },
     {
-      "title": "Polska społeczność bliżej Ciebie",
-      "category": "Społeczność",
-      "description": "Miejsca, inicjatywy i wydarzenia, dzięki którym łatwiej poczuć się jak u siebie.",
-      "image": "/images/earth-gif.gif",
-      "link": "/kontakt/"
+      "title": "Testowy pomysł na weekend",
+      "category": "Test: czas wolny",
+      "description": "Lekki placeholder pokazujący, jak może wyglądać kafelek o wydarzeniach, rodzinie i wolnym czasie.",
+      "image": "/images/placeholders/weekend-belgia.svg",
+      "link": "/artykuly/test-weekend/"
     }
   ],
   "notices": [
     {
-      "title": "Szukamy tematów ważnych dla Polonii",
-      "category": "Redakcja",
+      "title": "Testowe ogłoszenie społecznościowe",
+      "category": "Test: społeczność",
       "date": "Lipiec 2026",
-      "description": "Powiedz nam, o czym powinniśmy napisać. Czekamy na pytania i historie z życia w Belgii.",
-      "contact": "kontakt@polacywbelgii.be"
+      "description": "To przykładowa treść ogłoszenia. W tym miejscu można później opublikować informację o wydarzeniu albo lokalnej inicjatywie.",
+      "contact": "test@polacywbelgii.eu"
     },
     {
-      "title": "Dodaj bezpłatne ogłoszenie",
-      "category": "Ogłoszenie",
+      "title": "Testowe ogłoszenie redakcyjne",
+      "category": "Test: redakcja",
       "date": "Lipiec 2026",
-      "description": "Organizujesz wydarzenie lub lokalną inicjatywę? Prześlij treść przez formularz kontaktowy.",
-      "contact": "Odpowiadamy w dni robocze"
+      "description": "Drugi, niezależny placeholder służący do sprawdzenia wyglądu dłuższego komunikatu na stronie głównej.",
+      "contact": "Dane kontaktowe są przykładowe"
     }
   ]
 }
