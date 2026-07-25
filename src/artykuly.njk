@@ -1,0 +1,42 @@
+---
+layout: base.njk
+title: Artykuły
+description: Poradniki i aktualności dla Polaków mieszkających i pracujących w Belgii.
+pageKey: articles
+permalink: /artykuly/index.html
+---
+
+<header class="page-hero">
+  <div class="container page-hero__inner">
+    <span class="eyebrow" data-i18n="articles.eyebrow">Baza wiedzy</span>
+    <h1 data-i18n="articles.title">Artykuły i poradniki</h1>
+    <p data-i18n="articles.description">Formalności, praca, zdrowie i codzienne życie w Belgii — prosto i po polsku.</p>
+  </div>
+</header>
+
+<section class="section">
+  <div class="container article-list">
+    {% set articles = collections.articles | reverse %}
+    {% for article in articles %}
+    <article class="article-row {% if loop.index0 % 2 == 1 %}article-row--reverse{% endif %}">
+      <a class="article-row__image" href="{{ article.url }}" aria-label="Czytaj: {{ article.data.title }}">
+        <img src="{{ article.data.image or '/images/hero.jpg' }}" alt="" loading="lazy">
+      </a>
+      <div class="article-row__content">
+        <div class="article-meta">
+          <span class="tag" data-category>{{ article.data.category or "Poradnik" }}</span>
+          <time datetime="{{ article.date }}">{{ article.date | readableDate }}</time>
+        </div>
+        <h2><a href="{{ article.url }}" data-translation-nl="{{ article.data.title_nl }}" data-translation-fr="{{ article.data.title_fr }}">{{ article.data.title }}</a></h2>
+        <p data-translation-nl="{{ article.data.description_nl }}" data-translation-fr="{{ article.data.description_fr }}">{{ article.data.description }}</p>
+        <a class="text-link" href="{{ article.url }}"><span data-i18n="articles.read">Czytaj artykuł</span> <span aria-hidden="true">→</span></a>
+      </div>
+    </article>
+    {% else %}
+    <div class="empty-state">
+      <h2>Pierwsze artykuły są w przygotowaniu</h2>
+      <p>Zajrzyj tu ponownie już wkrótce.</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>

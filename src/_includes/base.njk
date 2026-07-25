@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ site.seo[pageKey].description or description }}" data-i18n-content="meta.description">
+  <title>{{ site.seo[pageKey].title or title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/script.js" defer></script>
+</head>
+<body data-page="{{ pageKey }}">
+  <a class="skip-link" href="#main">Przejdź do treści</a>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="/" aria-label="Polacy w Belgii — strona główna">
+        <span class="brand__mark">P<span>BE</span></span>
+        <span class="brand__text">Polacy <small>w Belgii</small></span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span><span></span><span class="sr-only">Otwórz menu</span>
+      </button>
+      <nav id="main-nav" class="main-nav" aria-label="Główna nawigacja">
+        <a href="/" {% if pageKey == "home" %}aria-current="page"{% endif %} data-i18n="nav.home">Strona główna</a>
+        <a href="/artykuly/" {% if pageKey == "articles" %}aria-current="page"{% endif %} data-i18n="nav.articles">Artykuły</a>
+        <a href="/kontakt/" {% if pageKey == "contact" %}aria-current="page"{% endif %} data-i18n="nav.contact">Kontakt</a>
+        <div class="language-picker">
+          <button class="language-picker__button" type="button" aria-expanded="false" aria-controls="language-menu">
+            <img src="/images/flags/pl.svg" alt="">
+            <span class="language-picker__code">PL</span>
+            <span aria-hidden="true">⌄</span>
+            <span class="sr-only" data-i18n="lang.choose">Wybierz język</span>
+          </button>
+          <div class="language-menu" id="language-menu">
+            <button type="button" data-lang="pl"><img src="/images/flags/pl.svg" alt=""> <span>Polski</span></button>
+            <button type="button" data-lang="nl"><img src="/images/flags/be.svg" alt=""> <span>Nederlands</span></button>
+            <button type="button" data-lang="fr"><img src="/images/flags/fr.svg" alt=""> <span>Français</span></button>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+  <main id="main">{{ content | safe }}</main>
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="brand brand--footer" href="/">
+          <span class="brand__mark">P<span>BE</span></span>
+          <span class="brand__text">Polacy <small>w Belgii</small></span>
+        </a>
+        <p data-i18n="footer.about">Praktyczny serwis tworzony z myślą o Polakach mieszkających w Belgii.</p>
+      </div>
+      <div>
+        <h2 data-i18n="footer.shortcuts">Na skróty</h2>
+        <a href="/" data-i18n="nav.home">Strona główna</a>
+        <a href="/artykuly/" data-i18n="nav.articles">Artykuły</a>
+        <a href="/kontakt/" data-i18n="nav.contact">Kontakt</a>
+      </div>
+      <div>
+        <h2 data-i18n="footer.important">Ważne</h2>
+        <p data-i18n="footer.disclaimer">Publikowane treści mają charakter informacyjny i nie stanowią porady prawnej, medycznej ani podatkowej.</p>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>© 2026 Polacy w Belgii</span>
+      <a href="/admin/" data-i18n="footer.admin">Panel redakcji</a>
+    </div>
+  </footer>
+</body>
+</html>

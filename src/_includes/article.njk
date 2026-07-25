@@ -1,0 +1,19 @@
+---
+layout: base.njk
+pageKey: articles
+---
+<article class="single-article">
+  <header class="single-article__header container">
+    <a class="back-link" href="/artykuly/">← <span data-i18n="home.allArticles">Wszystkie artykuły</span></a>
+    <div class="article-meta">
+      <span class="tag" data-category>{{ category or "Poradnik" }}</span>
+      <time datetime="{{ date }}">{{ date | readableDate }}</time>
+    </div>
+    <h1 data-translation-nl="{{ title_nl }}" data-translation-fr="{{ title_fr }}">{{ title }}</h1>
+    <p class="lead" data-translation-nl="{{ description_nl }}" data-translation-fr="{{ description_fr }}">{{ description }}</p>
+  </header>
+  {% if image %}<div class="single-article__image container"><img src="{{ image }}" alt="" loading="eager"></div>{% endif %}
+  <div class="prose container" data-i18n-html="article.{{ page.fileSlug }}.body">{{ content | safe }}</div>
+  {% if body_nl %}<template data-article-translation="nl">{{ body_nl | renderMarkdown | safe }}</template>{% endif %}
+  {% if body_fr %}<template data-article-translation="fr">{{ body_fr | renderMarkdown | safe }}</template>{% endif %}
+</article>

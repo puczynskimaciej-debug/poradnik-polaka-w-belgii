@@ -1,0 +1,46 @@
+{
+  "hero": {
+    "eyebrow": "Twój przewodnik po Belgii",
+    "title": "Belgia po polsku. Prościej, bliżej, razem.",
+    "description": "Rzetelne informacje o pracy, formalnościach i codziennym życiu oraz wiadomości ważne dla Polaków mieszkających w Belgii."
+  },
+  "news": [
+    {
+      "title": "Jak odnaleźć się w belgijskich formalnościach?",
+      "category": "Formalności",
+      "description": "Najważniejsze urzędy, dokumenty i pierwsze kroki po przeprowadzce.",
+      "image": "/images/hero.jpg",
+      "link": "/artykuly/"
+    },
+    {
+      "title": "Praca i zwolnienie lekarskie w Belgii",
+      "category": "Praca",
+      "description": "Co zrobić, gdy zachorujesz i jakie obowiązki ma pracownik?",
+      "image": "/images/white-hoodie-mockup-hanger_653045-1865.avif",
+      "link": "/artykuly/"
+    },
+    {
+      "title": "Polska społeczność bliżej Ciebie",
+      "category": "Społeczność",
+      "description": "Miejsca, inicjatywy i wydarzenia, dzięki którym łatwiej poczuć się jak u siebie.",
+      "image": "/images/earth-gif.gif",
+      "link": "/kontakt/"
+    }
+  ],
+  "notices": [
+    {
+      "title": "Szukamy tematów ważnych dla Polonii",
+      "category": "Redakcja",
+      "date": "Lipiec 2026",
+      "description": "Powiedz nam, o czym powinniśmy napisać. Czekamy na pytania i historie z życia w Belgii.",
+      "contact": "kontakt@polacywbelgii.be"
+    },
+    {
+      "title": "Dodaj bezpłatne ogłoszenie",
+      "category": "Ogłoszenie",
+      "date": "Lipiec 2026",
+      "description": "Organizujesz wydarzenie lub lokalną inicjatywę? Prześlij treść przez formularz kontaktowy.",
+      "contact": "Odpowiadamy w dni robocze"
+    }
+  ]
+}

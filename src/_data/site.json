@@ -1,0 +1,22 @@
+{
+  "contact": {
+    "email": "kontakt@polacywbelgii.eu",
+    "area": "Cała Belgia",
+    "heading": "Jesteśmy blisko polskiej społeczności",
+    "description": "Odpowiadamy na wiadomości w dni robocze. Nie udzielamy indywidualnych porad prawnych ani medycznych."
+  },
+  "seo": {
+    "home": {
+      "title": "Polacy w Belgii — informacje, artykuły i ogłoszenia",
+      "description": "Praktyczne informacje, wiadomości i ogłoszenia dla Polaków mieszkających w Belgii."
+    },
+    "articles": {
+      "title": "Artykuły i poradniki dla Polaków w Belgii",
+      "description": "Poradniki i aktualności dla Polaków mieszkających i pracujących w Belgii."
+    },
+    "contact": {
+      "title": "Kontakt — Polacy w Belgii",
+      "description": "Skontaktuj się z redakcją serwisu Polacy w Belgii."
+    }
+  }
+}

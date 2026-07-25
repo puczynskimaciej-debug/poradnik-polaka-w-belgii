@@ -2,9 +2,10 @@
   "name": "bycienazwolnieniu",
   "version": "1.0.0",
   "description": "",
-  "main": "script.js",
+  "main": ".eleventy.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "eleventy --serve",
+    "build": "eleventy"
   },
   "keywords": [],
   "author": "",
@@ -12,5 +13,8 @@
   "type": "commonjs",
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6"
+  },
+  "dependencies": {
+    "markdown-it": "^14.3.0"
   }
 }

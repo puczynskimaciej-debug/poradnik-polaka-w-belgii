@@ -1,13 +1,32 @@
-module.exports = function(eleventyConfig) {
-    eleventyConfig.addPassthroughCopy("src/style.css");
-    eleventyConfig.addPassthroughCopy("src/script.js");
-    eleventyConfig.addPassthroughCopy("src/images");
-    eleventyConfig.addPassthroughCopy("src/admin");
+module.exports = function (eleventyConfig) {
+  const markdown = require("markdown-it")({ html: false, linkify: true, typographer: true });
+  eleventyConfig.addPassthroughCopy("src/style.css");
+  eleventyConfig.addPassthroughCopy("src/script.js");
+  eleventyConfig.addPassthroughCopy({ "src/Images": "images" });
+  eleventyConfig.addPassthroughCopy({ "admin-app": "admin" });
+  eleventyConfig.addFilter("renderMarkdown", (value) => markdown.render(value || ""));
 
-    return {
-        dir: {
-            input: "src",
-            output: "_site"
-        }
-    };
+  eleventyConfig.addFilter("readableDate", (value) =>
+    new Intl.DateTimeFormat("pl-PL", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      timeZone: "Europe/Warsaw"
+    }).format(new Date(value))
+  );
+
+  eleventyConfig.addFilter("limit", (array, amount) =>
+    (array || []).slice(0, amount)
+  );
+
+  return {
+    dir: {
+      input: "src",
+      output: "_site",
+      includes: "_includes",
+      data: "_data"
+    },
+    htmlTemplateEngine: "njk",
+    markdownTemplateEngine: "njk"
+  };
 };

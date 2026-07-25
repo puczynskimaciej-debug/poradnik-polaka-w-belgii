@@ -1,0 +1,78 @@
+---
+layout: base.njk
+title: Strona główna
+description: Praktyczne informacje, wiadomości i ogłoszenia dla Polaków mieszkających w Belgii.
+pageKey: home
+---
+
+<section class="hero">
+  <div class="container hero__content">
+    <span class="eyebrow" data-i18n="home.eyebrow">{{ home.hero.eyebrow }}</span>
+    <h1 data-i18n="home.title">{{ home.hero.title }}</h1>
+    <p data-i18n="home.description">{{ home.hero.description }}</p>
+    <div class="hero__actions">
+      <a class="button" href="/artykuly/" data-i18n="home.read">Czytaj najnowsze artykuły</a>
+      <a class="text-link" href="#ogloszenia"><span data-i18n="home.noticesLink">Zobacz ogłoszenia</span> <span aria-hidden="true">↓</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="news-heading">
+  <div class="container">
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow" data-i18n="home.worth">Warto wiedzieć</span>
+        <h2 id="news-heading" data-i18n="home.latest">Najnowsze informacje</h2>
+      </div>
+      <a class="text-link" href="/artykuly/"><span data-i18n="home.allArticles">Wszystkie artykuły</span> <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="news-grid">
+      {% for card in home.news %}
+      <article class="news-card" data-i18n-group="news.{{ loop.index0 }}">
+        <img src="{{ card.image }}" alt="" loading="lazy">
+        <div class="news-card__body">
+          <span class="tag" data-i18n="news.{{ loop.index0 }}.category">{{ card.category }}</span>
+          <h3 data-i18n="news.{{ loop.index0 }}.title">{{ card.title }}</h3>
+          <p data-i18n="news.{{ loop.index0 }}.description">{{ card.description }}</p>
+          <a class="card-link" href="{{ card.link }}"><span data-i18n="common.more">Dowiedz się więcej</span> <span aria-hidden="true">→</span></a>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--tint" id="ogloszenia" aria-labelledby="notices-heading">
+  <div class="container">
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow" data-i18n="home.community">Tablica społeczności</span>
+        <h2 id="notices-heading" data-i18n="home.notices">Ogłoszenia</h2>
+      </div>
+    </div>
+    <div class="notice-grid">
+      {% for notice in home.notices %}
+      <article class="notice">
+        <div class="notice__top">
+          <span class="tag" data-i18n="notices.{{ loop.index0 }}.category">{{ notice.category }}</span>
+          <time data-i18n="notices.{{ loop.index0 }}.date">{{ notice.date }}</time>
+        </div>
+        <h3 data-i18n="notices.{{ loop.index0 }}.title">{{ notice.title }}</h3>
+        <p data-i18n="notices.{{ loop.index0 }}.description">{{ notice.description }}</p>
+        {% if notice.contact %}<p class="notice__contact">{{ notice.contact }}</p>{% endif %}
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container cta__inner">
+    <div>
+      <span class="eyebrow eyebrow--light" data-i18n="home.question">Masz pytanie?</span>
+      <h2 data-i18n="home.help">Jesteśmy tu, żeby pomóc</h2>
+      <p data-i18n="home.helpText">Napisz do nas, zaproponuj temat albo zgłoś ważną informację dla Polonii w Belgii.</p>
+    </div>
+    <a class="button button--light" href="/kontakt/" data-i18n="home.contact">Skontaktuj się</a>
+  </div>
+</section>

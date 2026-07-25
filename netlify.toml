@@ -1,0 +1,26 @@
+[build]
+  command = "npm run build"
+  publish = "_site"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "same-origin"
+    Cache-Control = "no-store"
+    Content-Security-Policy = "default-src 'self'; connect-src 'self' https://api.github.com https://github.com; img-src 'self' data: blob: https://raw.githubusercontent.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://github.com"
+
+[[headers]]
+  for = "/.netlify/functions/oauth"
+  [headers.values]
+    Cache-Control = "no-store"
+
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 200
