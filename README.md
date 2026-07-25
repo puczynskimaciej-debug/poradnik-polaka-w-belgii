@@ -43,6 +43,17 @@ npm run dev
 
 Publiczna strona działa pod adresem wyświetlonym przez Eleventy. Pełne logowanie OAuth wymaga środowiska Netlify albo lokalnego `netlify dev`, ponieważ callback korzysta z Netlify Function.
 
+## Test responsywności
+
+Automatyczny audyt uruchamia publiczną stronę i CMS w lokalnym Edge/Chrome dla pięciu viewportów: 360×740, 390×844, 768×1024, 1024×768 oraz 1440×900.
+
+```bash
+npm run dev -- --port=8088
+npm run test:responsive
+```
+
+Test sprawdza poziomy overflow, elementy interaktywne poza ekranem, mobilne menu, wszystkie sekcje CMS oraz dialog edycji artykułu, podglądu i użytkownika. Ścieżkę przeglądarki można zmienić przez zmienną `BROWSER_PATH`.
+
 ## Konfiguracja GitHub OAuth
 
 1. Na GitHub przejdź do **Settings → Developer settings → OAuth Apps → New OAuth App**.

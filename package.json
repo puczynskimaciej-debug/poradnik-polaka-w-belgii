@@ -5,14 +5,16 @@
   "main": ".eleventy.js",
   "scripts": {
     "dev": "eleventy --serve",
-    "build": "eleventy"
+    "build": "eleventy",
+    "test:responsive": "node tests/responsive-audit.mjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@11ty/eleventy": "^3.1.6"
+    "@11ty/eleventy": "^3.1.6",
+    "playwright-core": "^1.62.0"
   },
   "dependencies": {
     "markdown-it": "^14.3.0"
