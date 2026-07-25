@@ -16,6 +16,13 @@ Wielojęzyczny serwis Eleventy z własnym statycznym panelem CMS. Treści pozost
 
 Token GitHub jest przechowywany w `sessionStorage` i znika po zamknięciu karty. Panel przed załadowaniem treści sprawdza, czy konto ma uprawnienie `push` do skonfigurowanego repozytorium.
 
+Panel korzysta również z natywnych ról repozytorium:
+
+- `push` — edytor, który zarządza artykułami, stronami, SEO i mediami,
+- `admin` — administrator, który dodatkowo zaprasza i usuwa użytkowników oraz zmienia ich role.
+
+Administrator może zarządzać collaboratorami bezpośrednio z CMS. GitHub pozostaje jedynym źródłem kont i uprawnień. Panel zawiera też lokalny podgląd artykułu przed zapisem oraz historię commitów z autorem, datą i odnośnikiem do pełnej zmiany.
+
 ## Moduły CMS
 
 - `admin-app/config.js` — repozytorium, gałąź i ścieżki treści,
@@ -71,4 +78,4 @@ Nie ma osobnej bazy użytkowników CMS. Aby nadać dostęp:
 2. nadaj mu prawo zapisu,
 3. użytkownik loguje się przez GitHub w `/admin/`.
 
-Odebranie dostępu do repozytorium automatycznie odbiera możliwość używania CMS.
+Odebranie dostępu do repozytorium automatycznie odbiera możliwość używania CMS. Te same operacje można wykonywać z sekcji **Użytkownicy i role**, widocznej wyłącznie dla administratora.

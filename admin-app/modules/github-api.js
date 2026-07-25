@@ -67,6 +67,40 @@ export class GitHubApi {
       body: JSON.stringify({ message, sha, branch: this.branch })
     });
   }
+
+  async commits(path = "") {
+    const query = new URLSearchParams({ sha: this.branch, per_page: "50" });
+    if (path) query.set("path", path);
+    return this.request(`/commits?${query}`);
+  }
+
+  async collaborators() {
+    const users = await this.request("/collaborators?affiliation=direct&per_page=100");
+    return Promise.all(users.map(async (user) => {
+      const details = await this.request(`/collaborators/${encodeURIComponent(user.login)}/permission`);
+      return { ...user, permission: details.permission, roleName: details.role_name };
+    }));
+  }
+
+  async invitations() {
+    return this.request("/invitations?per_page=100");
+  }
+
+  async setCollaborator(username, permission) {
+    return this.request(`/collaborators/${encodeURIComponent(username)}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ permission })
+    });
+  }
+
+  async removeCollaborator(username) {
+    return this.request(`/collaborators/${encodeURIComponent(username)}`, { method: "DELETE" });
+  }
+
+  async cancelInvitation(invitationId) {
+    return this.request(`/invitations/${encodeURIComponent(invitationId)}`, { method: "DELETE" });
+  }
 }
 
 function encodePath(value) {

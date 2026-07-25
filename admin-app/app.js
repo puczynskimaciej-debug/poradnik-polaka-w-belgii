@@ -3,7 +3,7 @@ import { GitHubAuth } from "./modules/auth.js";
 import { GitHubApi } from "./modules/github-api.js";
 import { ContentRepository } from "./modules/repository.js";
 
-const state = { api: null, repository: null, user: null, home: null, homeSha: null, site: null, siteSha: null, articles: [], media: [], uploadTarget: null };
+const state = { api: null, repository: null, user: null, isAdmin: false, home: null, homeSha: null, site: null, siteSha: null, articles: [], media: [], history: [], users: [], invitations: [], uploadTarget: null, previewLanguage: "pl" };
 const auth = new GitHubAuth(cmsConfig.github);
 const $ = (selector, parent = document) => parent.querySelector(selector);
 const $$ = (selector, parent = document) => [...parent.querySelectorAll(selector)];
@@ -19,6 +19,7 @@ async function initialize() {
     state.api = new GitHubApi({ token: auth.token(), ...cmsConfig.github });
     const repositoryInfo = await state.api.repository();
     if (!repositoryInfo.permissions?.push) throw new Error("To konto GitHub nie ma prawa zapisu do repozytorium.");
+    state.isAdmin = Boolean(repositoryInfo.permissions?.admin);
     state.user = await githubUser();
     state.repository = new ContentRepository(state.api, cmsConfig.paths);
     await loadContent();
@@ -36,8 +37,10 @@ async function githubUser() {
 }
 
 async function loadContent() {
-  const [home, site, articles, media] = await Promise.all([state.repository.home(), state.repository.site(), state.repository.articles(), state.repository.media()]);
+  const [home, site, articles, media, history] = await Promise.all([state.repository.home(), state.repository.site(), state.repository.articles(), state.repository.media(), state.api.commits()]);
   [state.home, state.homeSha, state.site, state.siteSha, state.articles, state.media] = [home.data, home.sha, site.data, site.sha, articles, media];
+  state.history = history;
+  if (state.isAdmin) [state.users, state.invitations] = await Promise.all([state.api.collaborators(), state.api.invitations()]);
   renderAll();
 }
 
@@ -51,6 +54,7 @@ function showApp() {
   $("#current-user").textContent = state.user.name || state.user.login;
   $("#repository-name").textContent = `${cmsConfig.github.owner}/${cmsConfig.github.repo}`;
   $("#user-avatar").src = state.user.avatar_url;
+  $$(".admin-only").forEach((element) => element.hidden = !state.isAdmin);
 }
 function notify(text, error = false) {
   const box = $("#notice"); box.textContent = text; box.className = `message${error ? " message--error" : ""}`; box.hidden = false;
@@ -58,7 +62,7 @@ function notify(text, error = false) {
 }
 function renderAll() {
   $("#article-count").textContent = state.articles.length; $("#news-count").textContent = state.home.news.length; $("#media-count").textContent = state.media.length;
-  renderHome(); renderArticles(); renderSite(); renderMedia();
+  renderHome(); renderArticles(); renderSite(); renderMedia(); renderHistory(); renderUsers();
 }
 function renderHome() {
   const form = $("#home-form"); form.eyebrow.value = state.home.hero.eyebrow; form.title.value = state.home.hero.title; form.description.value = state.home.hero.description;
@@ -79,9 +83,27 @@ function renderSite() {
 function renderMedia() {
   $("#media-grid").innerHTML = state.media.length ? state.media.map((file) => `<article class="media-card"><img src="${file.download_url}" alt=""><div><p title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</p><button class="ghost danger" data-delete-media="${escapeHtml(file.path)}">Usuń</button></div></article>`).join("") : "<p>Biblioteka jest pusta.</p>";
 }
+function renderHistory() {
+  $("#history-list").innerHTML = state.history.length ? state.history.map((item) => {
+    const author = item.author?.login || item.commit.author?.name || "Nieznany użytkownik";
+    const avatar = item.author?.avatar_url || "";
+    return `<div class="table-row"><div><h3>${escapeHtml(item.commit.message.split("\n")[0])}</h3><div class="history-author">${avatar ? `<img class="history-avatar" src="${avatar}" alt="">` : ""}<span>${escapeHtml(author)} · ${formatDateTime(item.commit.author?.date)}</span></div></div><a class="commit-link" href="${item.html_url}" target="_blank" rel="noopener">${item.sha.slice(0,7)} ↗</a></div>`;
+  }).join("") : "<p>Brak historii zmian.</p>";
+}
+function renderUsers() {
+  if (!state.isAdmin) return;
+  $("#users-list").innerHTML = state.users.map((user) => {
+    const isOwner = user.login.toLowerCase() === cmsConfig.github.owner.toLowerCase();
+    const role = user.permission === "admin" ? "admin" : "push";
+    return `<div class="table-row"><div class="history-author"><img class="history-avatar" src="${user.avatar_url}" alt=""><div><h3>${escapeHtml(user.login)}</h3><p>${isOwner ? "Właściciel repozytorium" : role === "admin" ? "Administrator" : "Edytor"}</p></div></div><div class="row-actions">${isOwner ? "<small>Pełny dostęp</small>" : `<select class="role-select" data-user-role="${escapeHtml(user.login)}"><option value="push" ${role === "push" ? "selected" : ""}>Edytor</option><option value="admin" ${role === "admin" ? "selected" : ""}>Administrator</option></select><button class="ghost danger" data-remove-user="${escapeHtml(user.login)}">Usuń</button>`}</div></div>`;
+  }).join("");
+  $("#invitations-card").hidden = state.invitations.length === 0;
+  $("#invitations-list").innerHTML = state.invitations.map((invitation) => `<div class="table-row"><div><h3>${escapeHtml(invitation.invitee?.login || invitation.email || "Zaproszony użytkownik")}</h3><p>Oczekuje na przyjęcie · ${invitation.permissions === "admin" ? "Administrator" : "Edytor"}</p></div><button class="ghost danger" data-cancel-invitation="${invitation.id}">Anuluj</button></div>`).join("");
+}
 function switchView(name) { $$(".view").forEach((panel) => panel.classList.toggle("is-active", panel.dataset.panel === name)); $$(".nav-item").forEach((button) => button.classList.toggle("is-active", button.dataset.view === name)); $(".sidebar").classList.remove("is-open"); }
 function escapeHtml(value) { return String(value).replace(/[&<>"']/g, (char) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char])); }
 function formatDate(value) { const date = new Date(value); return Number.isNaN(date.valueOf()) ? String(value || "") : date.toLocaleDateString("pl-PL"); }
+function formatDateTime(value) { const date = new Date(value); return Number.isNaN(date.valueOf()) ? String(value || "") : date.toLocaleString("pl-PL", { dateStyle: "medium", timeStyle: "short" }); }
 function formData(form) { return Object.fromEntries(new FormData(form).entries()); }
 
 function openArticle(article = null) {
@@ -90,6 +112,30 @@ function openArticle(article = null) {
   form.slug.value = article?.slug || ""; $("#article-dialog").showModal();
 }
 async function uploadImage(target = null) { state.uploadTarget = target; $("#media-input").click(); }
+function renderArticlePreview(language = state.previewLanguage) {
+  state.previewLanguage = language;
+  const form = $("#article-form");
+  const suffix = language === "pl" ? "" : `_${language}`;
+  const title = form.elements[`title${suffix}`]?.value.trim() || form.title.value.trim() || "Bez tytułu";
+  const description = form.elements[`description${suffix}`]?.value.trim() || form.description.value.trim();
+  const body = form.elements[`body${suffix}`]?.value.trim() || form.body.value.trim();
+  const image = form.image.value.trim();
+  $("#preview-title").textContent = title;
+  $("#article-preview").innerHTML = `${image ? `<img src="${escapeHtml(image)}" alt="">` : ""}<h1>${escapeHtml(title)}</h1><p class="preview-description">${escapeHtml(description)}</p>${markdownPreview(body)}`;
+  $$("[data-preview-language]").forEach((button) => button.classList.toggle("is-active", button.dataset.previewLanguage === language));
+}
+function markdownPreview(markdown) {
+  const escaped = escapeHtml(markdown);
+  const blocks = escaped.split(/\n{2,}/).map((block) => {
+    if (block.startsWith("### ")) return `<h3>${inlineMarkdown(block.slice(4))}</h3>`;
+    if (block.startsWith("## ")) return `<h2>${inlineMarkdown(block.slice(3))}</h2>`;
+    if (block.split("\n").every((line) => line.startsWith("- "))) return `<ul>${block.split("\n").map((line) => `<li>${inlineMarkdown(line.slice(2))}</li>`).join("")}</ul>`;
+    if (block.startsWith("&gt; ")) return `<blockquote>${inlineMarkdown(block.slice(5))}</blockquote>`;
+    return `<p>${inlineMarkdown(block).replace(/\n/g, "<br>")}</p>`;
+  });
+  return blocks.join("");
+}
+function inlineMarkdown(value) { return value.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\*(.+?)\*/g, "<em>$1</em>"); }
 
 $("#github-login").addEventListener("click", () => { try { auth.login(); } catch (error) { showAuth(error.message); } });
 $("#logout-button").addEventListener("click", () => auth.logout());
@@ -116,13 +162,22 @@ $("#media-input").addEventListener("change", async (event) => {
 document.addEventListener("click", async (event) => {
   const action=event.target.closest("[data-action]")?.dataset.action;
   if(action==="new-article")openArticle(); if(action==="add-news"){state.home.news.push({title:"",category:"",description:"",image:"",link:"/artykuly/"});renderRepeater("news",state.home.news);} if(action==="add-notice"){state.home.notices.push({title:"",category:"",date:"",description:"",contact:""});renderRepeater("notices",state.home.notices);} if(action==="upload-media")uploadImage(); if(action==="pick-article-image")uploadImage($("#article-form").image);
+  if(action==="preview-article"){state.previewLanguage="pl";renderArticlePreview("pl");$("#preview-dialog").showModal();}
+  if(action==="new-user"&&state.isAdmin)$("#user-dialog").showModal();
+  if(action==="refresh-history"){try{state.history=await state.api.commits();renderHistory();notify("Historia została odświeżona.");}catch(error){notify(error.message,true);}}
   const remove=event.target.closest("[data-remove]"); if(remove&&confirm("Usunąć ten element?")){const type=remove.dataset.remove;state.home[type].splice(Number(remove.closest("[data-index]").dataset.index),1);renderRepeater(type,state.home[type]);}
   const newsUpload=event.target.closest("[data-news-upload]"); if(newsUpload)uploadImage($(`#news-editor [data-index="${newsUpload.dataset.newsUpload}"] [data-field="image"]`));
   const edit=event.target.closest("[data-edit-article]"); if(edit)openArticle(state.articles.find((item)=>item.slug===edit.dataset.editArticle));
   const removeArticle=event.target.closest("[data-delete-article]"); if(removeArticle&&confirm("Trwale usunąć artykuł z GitHub?")){try{const article=state.articles.find((item)=>item.slug===removeArticle.dataset.deleteArticle);await state.repository.deleteArticle(article);state.articles=await state.repository.articles();renderAll();notify("Artykuł usunięty.");}catch(error){notify(error.message,true);}}
   const removeMedia=event.target.closest("[data-delete-media]"); if(removeMedia&&confirm("Trwale usunąć obraz z GitHub?")){try{const file=state.media.find((item)=>item.path===removeMedia.dataset.deleteMedia);await state.repository.deleteMedia(file);state.media=await state.repository.media();renderAll();notify("Obraz usunięty.");}catch(error){notify(error.message,true);}}
+  const previewLanguage=event.target.closest("[data-preview-language]");if(previewLanguage)renderArticlePreview(previewLanguage.dataset.previewLanguage);
+  const removeUser=event.target.closest("[data-remove-user]");if(removeUser&&state.isAdmin&&confirm(`Odebrać dostęp użytkownikowi ${removeUser.dataset.removeUser}?`)){try{await state.api.removeCollaborator(removeUser.dataset.removeUser);await refreshUsers();notify("Dostęp użytkownika został odebrany.");}catch(error){notify(error.message,true);}}
+  const cancelInvitation=event.target.closest("[data-cancel-invitation]");if(cancelInvitation&&state.isAdmin&&confirm("Anulować to zaproszenie?")){try{await state.api.cancelInvitation(cancelInvitation.dataset.cancelInvitation);await refreshUsers();notify("Zaproszenie zostało anulowane.");}catch(error){notify(error.message,true);}}
   if(event.target.closest("[data-close]"))event.target.closest("dialog").close();
 });
+document.addEventListener("change",async(event)=>{const role=event.target.closest("[data-user-role]");if(!role||!state.isAdmin)return;try{await state.api.setCollaborator(role.dataset.userRole,role.value);await refreshUsers();notify("Rola użytkownika została zmieniona.");}catch(error){notify(error.message,true);renderUsers();}});
+$("#user-form").addEventListener("submit",async(event)=>{event.preventDefault();const button=event.submitter;setBusy(button,true);const values=formData(event.target);try{await state.api.setCollaborator(values.username.trim(),values.permission);event.target.reset();$("#user-dialog").close();await refreshUsers();notify("Zaproszenie zostało wysłane przez GitHub.");}catch(error){notify(error.message,true);}finally{setBusy(button,false);}});
+async function refreshUsers(){[state.users,state.invitations]=await Promise.all([state.api.collaborators(),state.api.invitations()]);renderUsers();}
 function setBusy(button,busy){if(!button)return;button.disabled=busy;if(busy){button.dataset.label=button.textContent;button.textContent="Zapisywanie…";}else if(button.dataset.label)button.textContent=button.dataset.label;}
 
 initialize();
