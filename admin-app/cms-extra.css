@@ -1,3 +1,4 @@
+[hidden] { display: none !important; }
 .github-login { display: flex; width: 100%; margin-top: 28px; gap: 10px; }
 .github-login svg { width: 21px; }
 .loading-card { text-align: center; }
