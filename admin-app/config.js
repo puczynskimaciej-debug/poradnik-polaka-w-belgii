@@ -12,5 +12,6 @@ export const cmsConfig = Object.freeze({
     site: "src/_data/site.json",
     media: "src/Images/uploads"
   },
-  oauthEndpoint: "/.netlify/functions/oauth"
+  oauthEndpoint: "/.netlify/functions/oauth",
+  oauthRedirectUri: "https://polacywbelgii.eu/admin/"
 });

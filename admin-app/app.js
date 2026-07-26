@@ -12,7 +12,7 @@ async function initialize() {
   try {
     if (location.search.includes("code=")) {
       showLoading();
-      await auth.completeCallback(cmsConfig.oauthEndpoint);
+      await auth.completeCallback(cmsConfig.oauthEndpoint, cmsConfig.oauthRedirectUri);
     }
     if (!auth.token()) return showAuth();
     showLoading();
@@ -136,7 +136,7 @@ function markdownPreview(markdown) {
 }
 function inlineMarkdown(value) { return value.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\*(.+?)\*/g, "<em>$1</em>"); }
 
-$("#github-login").addEventListener("click", () => { try { auth.login(); } catch (error) { showAuth(error.message); } });
+$("#github-login").addEventListener("click", () => { try { auth.login(cmsConfig.oauthRedirectUri); } catch (error) { showAuth(error.message); } });
 $("#logout-button").addEventListener("click", () => auth.logout());
 $("#menu-toggle").addEventListener("click", () => $(".sidebar").classList.toggle("is-open"));
 $$(".nav-item").forEach((button) => button.addEventListener("click", () => switchView(button.dataset.view)));

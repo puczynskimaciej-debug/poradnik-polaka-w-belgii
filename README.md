@@ -67,6 +67,8 @@ Test sprawdza poziomy overflow, elementy interaktywne poza ekranem, mobilne menu
    - `GITHUB_CLIENT_SECRET`
 5. Nie zapisuj Client Secret w repozytorium ani w kodzie przeglądarkowym.
 
+Callback jest celowo ustawiony na stałe w `admin-app/config.js`. Adres w GitHub OAuth App musi być identyczny, łącznie z protokołem `https`, brakiem `www` oraz końcowym ukośnikiem `/`.
+
 Repozytorium jest obecnie publiczne, dlatego panel żąda zakresu `public_repo`. Jeżeli stanie się prywatne, zmień `scope` w `admin-app/config.js` na `repo`.
 
 ## Konfiguracja Netlify
